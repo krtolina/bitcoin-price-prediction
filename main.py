@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.python.keras import layers
 
-price_data = yf.download('BTC-USD', start='2012-01-01', end='2022-01-01')
+SAMPLE_SPAN = 60
+price_data = yf.download('BTC-USD', start='2014-01-01', end='2022-01-01')
 
 close_prices = price_data['Close']
 values = close_prices.values
@@ -19,19 +20,18 @@ train_data = scaled_data[0: training_data_len, :]
 x_train = []
 y_train = []
 
-for i in range(60, len(train_data)):
-    x_train.append(train_data[i - 60:i, 0])
+for i in range(SAMPLE_SPAN, len(train_data)):
+    x_train.append(train_data[i - SAMPLE_SPAN:i, 0])
     y_train.append(train_data[i, 0])
 
 x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
-test_data = scaled_data[training_data_len - 60:, :]
+test_data = scaled_data[training_data_len - SAMPLE_SPAN:, :]
 x_test = []
-y_test = values[training_data_len:]
 
-for i in range(60, len(test_data)):
-    x_test.append(test_data[i - 60:i, 0])
+for i in range(SAMPLE_SPAN, len(test_data)):
+    x_test.append(test_data[i - SAMPLE_SPAN:i, 0])
 
 x_test = np.array(x_test)
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
