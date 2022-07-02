@@ -6,33 +6,28 @@ import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.python.keras import layers
 
-SAMPLE_SPAN = 60
+SAMPLE_SPAN = 60  # DAYS
+TRAIN_TEST_RATIO = 0.8
 price_data = yf.download('BTC-USD', start='2014-01-01', end='2022-01-01')
 
-close_prices = price_data['Close']
-values = close_prices.values
-training_data_len = math.ceil(len(values) * 0.8)
+close_prices = price_data['Close'].values
+training_data_len = math.ceil(len(close_prices) * TRAIN_TEST_RATIO)
 
 scaler = MinMaxScaler(feature_range=(0, 1))
-scaled_data = scaler.fit_transform(values.reshape(-1, 1))
+scaled_data = scaler.fit_transform(close_prices.reshape(-1, 1))
+
 train_data = scaled_data[0: training_data_len, :]
-
-x_train = []
-y_train = []
-
+x_train, y_train = [], []
 for i in range(SAMPLE_SPAN, len(train_data)):
     x_train.append(train_data[i - SAMPLE_SPAN:i, 0])
     y_train.append(train_data[i, 0])
-
 x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
 test_data = scaled_data[training_data_len - SAMPLE_SPAN:, :]
 x_test = []
-
 for i in range(SAMPLE_SPAN, len(test_data)):
     x_test.append(test_data[i - SAMPLE_SPAN:i, 0])
-
 x_test = np.array(x_test)
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
@@ -52,10 +47,9 @@ train = data[:training_data_len]
 validation = data[training_data_len:]
 validation['Predictions'] = predictions
 plt.figure(figsize=(16, 8))
-plt.title('Model')
 plt.xlabel('Date')
-plt.ylabel('Close Price USD ($)')
+plt.ylabel('Price')
 plt.plot(train)
 plt.plot(validation[['Close', 'Predictions']])
-plt.legend(['Train', 'Val', 'Predictions'], loc='lower right')
+plt.legend(['Train', 'Actual Price', 'Price Prediction'], loc='lower right')
 plt.show()
