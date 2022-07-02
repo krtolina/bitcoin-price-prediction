@@ -7,11 +7,11 @@ from tensorflow import keras
 from tensorflow.python.keras import layers
 
 SAMPLE_SPAN = 60  # DAYS
-TRAIN_TEST_RATIO = 0.8
+TRAIN_TEST_RATIO = 80  # PERCENT
 price_data = yf.download('BTC-USD', start='2014-01-01', end='2022-01-01')
 
 close_prices = price_data['Close'].values
-training_data_len = math.ceil(len(close_prices) * TRAIN_TEST_RATIO)
+training_data_len = math.ceil(len(close_prices) * TRAIN_TEST_RATIO / 100)
 
 scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_data = scaler.fit_transform(close_prices.reshape(-1, 1))
