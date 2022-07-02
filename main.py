@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.python.keras import layers
 
-stock_data = yf.download('BTC-USD', start='2012-01-01', end='2022-01-01')
+price_data = yf.download('BTC-USD', start='2012-01-01', end='2022-01-01')
 
-close_prices = stock_data['Close']
+close_prices = price_data['Close']
 values = close_prices.values
 training_data_len = math.ceil(len(values) * 0.8)
 
@@ -47,7 +47,7 @@ model.fit(x_train, y_train, batch_size=1, epochs=3)
 predictions = model.predict(x_test)
 predictions = scaler.inverse_transform(predictions)
 
-data = stock_data.filter(['Close'])
+data = price_data.filter(['Close'])
 train = data[:training_data_len]
 validation = data[training_data_len:]
 validation['Predictions'] = predictions
