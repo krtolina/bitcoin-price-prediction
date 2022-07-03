@@ -1,5 +1,6 @@
 import math
 import yfinance as yf
+import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
@@ -60,6 +61,7 @@ print("Root Mean Square Error:")
 print(rmse)
 
 # PLOT DATA
+pd.options.mode.chained_assignment = None
 data = price_data.filter(['Close'])
 train = data[:training_data_len]
 validation = data[training_data_len:]
