@@ -7,6 +7,7 @@ from tensorflow import keras
 from tensorflow.python.keras import layers
 
 EPOCHS = 3
+BATCH_SIZE = 1
 SAMPLE_SPAN = 60  # DAYS
 TRAIN_TEST_RATIO = 80  # PERCENT
 START_DATE = '2014-01-01'
@@ -49,7 +50,7 @@ model.add(layers.CuDNNLSTM(100, return_sequences=False))
 model.add(layers.Dense(25))
 model.add(layers.Dense(1))
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, batch_size=1, epochs=EPOCHS)
+model.fit(x_train, y_train, batch_size=BATCH_SIZE, epochs=EPOCHS)
 
 # GET PREDICTIONS FROM TEST INPUT
 predictions = model.predict(x_test)
