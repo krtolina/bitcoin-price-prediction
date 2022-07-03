@@ -35,7 +35,7 @@ x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
 # MAKE SAMPLES FOR TESTING
-test_data = scaled_data[training_data_len - SAMPLE_SPAN:, :]
+test_data = scaled_data[training_data_len - SAMPLE_SPAN - 1:-1, :]
 x_test, y_test = [], close_prices[training_data_len:]
 
 for i in range(SAMPLE_SPAN, len(test_data)):
